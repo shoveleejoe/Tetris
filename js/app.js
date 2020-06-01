@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     'url(images/pink_block.png)',
     'url(images/purple_block.png)',
     'url(images/peach_block.png)',
-    'url(images/yellow_block.png)'
+    'url(images/yellow_block.png)',
+    'url(images/blue_block.png)'
   ]
 
 
@@ -106,7 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
     [GRID_WIDTH, GRID_WIDTH + 1, GRID_WIDTH + 2, GRID_WIDTH + 3]
   ]
 
-  const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino]
+  const jTetromino = [
+    [0, 1, GRID_WIDTH + 1, GRID_WIDTH *2 + 1],
+    [2, GRID_WIDTH, GRID_WIDTH + 1, GRID_WIDTH + 2],
+    [1, GRID_WIDTH + 1, GRID_WIDTH * 2 + 1, GRID_WIDTH * 2 + 2],
+    [GRID_WIDTH, GRID_WIDTH * 2, GRID_WIDTH + 1, GRID_WIDTH + 2]
+  ]
+
+  const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino, jTetromino]
 
   //Randomly Select Tetromino
   let random = Math.floor(Math.random() * theTetrominoes.length)
@@ -151,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  //move left and prevent collisions with shapes moving left
+  //move right and prevent collisions with shapes moving left
   function moveright() {
     undraw()
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
@@ -162,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     draw()
   }
 
-  //move right and prevent collisions with shapes moving right
+  //move left and prevent collisions with shapes moving right
   function moveleft() {
     undraw()
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
@@ -200,7 +208,21 @@ document.addEventListener('DOMContentLoaded', () => {
       currentRotation = 0
     }
     current = theTetrominoes[random][currentRotation]
-    draw()
+    // draw()
+  //move Tetromino toward center if rotation will cause the Tetromino to extend over the edge
+    console.log('current', current)
+    if (current.some(index => (currentPosition + index) % width === 0)) currentPosition +=1
+    // console.log('(currentPosition + index) % width === 0', (currentPosition + currentIndex) % width)
+    // if (current.includes('3')) {
+    //   console.log('iTetromino', current)
+    if (current.some(index => (currentPosition - index) % width === width -1)) currentPosition -=1
+    console.log('(currentPosition + index) % width === width -1 === 9', (currentPosition + currentIndex) % width)
+      // } else if (current.some(index => (currentPosition + index) % width === width -1)) {
+      // currentPosition -=1} 
+      // const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
+      // if (!isAtRightEdge) currentPosition += 1
+      // if (current.some(index => squares[currentPosition + index].classList.contains('block2'))) currentPosition -= 1 
+  draw() 
   }
 
   //Game Over
@@ -221,7 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
     [0, displayWidth, displayWidth + 1, displayWidth * 2 + 1], /* zTetromino */
     [1, displayWidth, displayWidth + 1, displayWidth + 2], /* tTetromino */
     [0, 1, displayWidth, displayWidth + 1], /* oTetromino */
-    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1] /* iTetromino */
+    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1], /* iTetromino */
+    [0, 1, displayWidth + 1, displayWidth * 2 + 1] /* jTetromino */
   ]
 
   function displayShape() {
